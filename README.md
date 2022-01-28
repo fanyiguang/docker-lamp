@@ -1,2 +1,2 @@
 # docker-lamp
-docker lamp环境一键搭建
+docker lamp一键环境搭建
