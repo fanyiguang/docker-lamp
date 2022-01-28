@@ -1,7 +1,7 @@
 # docker-lamp
 #### docker lamp一键环境搭建
 
-需要安装docker和docker-compose：
+需要安装docker和docker-compose：  
 安装方法：http://get.daocloud.io/
 
 启动命令：
