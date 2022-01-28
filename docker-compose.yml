@@ -1,0 +1,74 @@
+version: "3"
+services:
+  nginx:
+    image: nginx
+    container_name: nginx_name
+    ports:
+      - "81:80"
+    volumes:
+      - ./typecho/:/var/www/html/:rw
+      - ./conf/default.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/logs:/var/log/nginx
+    environment:
+      TZ: "Asia/Shanghai"
+    restart: always
+    networks:
+      - default
+
+  php:
+    build: .
+    container_name: php_name
+    volumes:
+      - ./www/:/var/www/html/:rw
+      - ./php/logs:/usr/local/var/log/
+      - ./conf/my-php-conf.ini:/usr/local/etc/php/conf.d/my-php-conf.ini:rw
+    restart: always
+    cap_add:
+      - SYS_PTRACE
+    networks:
+      - default
+
+  mysql:
+    image: mysql:5.7
+    container_name: mysql_name
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./mysql/data:/var/lib/mysql/:rw
+      - ./conf/my.cnf:/etc/mysql/my.cnf:rw
+    restart: always
+    networks:
+      - default
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+      TZ: "Asia/Shanghai"
+
+  redis:
+    image: redis
+    container_name: redis_name
+    ports:
+      - "6380:6379"
+    volumes:
+      - ./redis/data:/data
+      - ./conf/redis.conf:/etc/redis/redis.conf
+    restart: always
+    environment:
+      TZ: "Asia/Shanghai"
+    networks:
+      - default
+
+  phpmyadmin:
+      image:     phpmyadmin/phpmyadmin
+      container_name: phpmyadmin_name
+      ports:
+          - "9080:80"
+      environment:
+          - PMA_ARBITRARY=1
+      depends_on:
+          - mysql
+      networks:
+          - default
+
+networks:
+  default:
+
